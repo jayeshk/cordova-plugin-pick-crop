@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
+            id="cordova-plugin-pick-crop" version="1.0.0">
+
+        <name>Pick and Crop</name>
+        <description>A cordova plugin for android ,ios to pick image and crop it</description>
+        <author>Huang Li</author>
+        <keywords>Pick,Photo,Cordova,Crop </keywords>
+        <license>Apache 2.0 License</license>
+
+        <engines>
+            <engine name="cordova-android" version=">=4.0.0" />
+            <engine name="cordova-ios" version=">=3.5.0" />
+        </engines>
+
+        <js-module src="www/pickCrop.js" name="PickCrop">
+            <clobbers target="plugins.pickCrop" />
+        </js-module>
+
+
+        <!-- ios -->
+
+        <!-- android -->
+        <platform name="android">
+
+            <config-file target="res/xml/config.xml" parent="/*">
+                <feature name="PickCrop">
+                    <param name="android-package" value="cordova.plugins.pickcrop.PickCropPlugin" />
+                </feature>
+            </config-file>
+            <config-file target="AndroidManifest.xml" parent="/manifest">
+                <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            </config-file>
+            <config-file target="AndroidManifest.xml" parent="/manifest/application">
+               <activity android:theme="@style/CustomTheme" android:name="cordova.plugins.pickcrop.CropImageActivity">
+               </activity>
+            </config-file>
+            <source-file src="src/android/PickCropPlugin.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/Crop.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/CropImageActivity.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/CropImageView.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/CropUtil.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/HighlightView.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/ImageViewTouchBase.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/Log.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/MonitoredActivity.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/RotateBitmap.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/FakeR.java" target-dir="src/cordova/plugins/pickcrop" />
+
+            <source-file src="src/android/res/layout/crop__activity_crop.xml" target-dir="res/layout" />
+            <source-file src="src/android/res/layout/crop__layout_done_cancel.xml" target-dir="res/layout" />
+            <source-file src="src/android/res/values/attrs.xml" target-dir="res/values" />
+            <source-file src="src/android/res/values-en/strings.xml" target-dir="res/values-en" />
+            <source-file src="src/android/res/values-zh-rCN/strings.xml" target-dir="res/values-zh-rCN" />
+            <source-file src="src/android/res/values/styles.xml" target-dir="res/values" />
+            <source-file src="src/android/res/values/theme.xml" target-dir="res/values" />
+            
+            <source-file src="src/android/res/drawable/crop__selectable_background.xml" target-dir="res/drawable" />
+            <source-file src="src/android/res/drawable/crop__texture.xml" target-dir="res/drawable" />
+            <source-file src="src/android/res/drawable-xhdpi/crop__divider.9.png" target-dir="res/drawable-xhdpi" />
+            <source-file src="src/android/res/drawable-xhdpi/crop__ic_cancel.png" target-dir="res/drawable-xhdpi" />
+            <source-file src="src/android/res/drawable-xhdpi/crop__ic_done.png" target-dir="res/drawable-xhdpi" />
+            <source-file src="src/android/res/drawable-xhdpi/crop__tile.png" target-dir="res/drawable-xhdpi" />
+        </platform>
+    </plugin>
