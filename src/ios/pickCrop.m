@@ -54,37 +54,15 @@
     //自代理
     pc.delegate = self;
     self.callbackId = command.callbackId;
-    NSLog(@"-------------callbackId-------------------------");
-    NSLog(self.callbackId);
-//
-//    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-//                                                      messageAsString:@"FFF"];
-    
-//    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-//    CDVPluginResult *result=[CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
-//    [result setKeepCallbackAsBool:YES];
-//    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    
-    //    [self.viewController addChildViewController:childView];
-    [self.viewController presentViewController:pc animated:YES completion:NULL];
-    // 
-     
-    
+    [self.viewController presentViewController:pc animated:YES completion:NULL];    
 }
-//PickerImage完成后的代理方法
+
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
-    //裁剪完成 关闭当前页面
+  
     [self.viewController dismissViewControllerAnimated:YES completion:nil];
-    
-    //定义一个newPhoto，用来存放我们选择的图片。
     UIImage *newPhoto = [info objectForKey:@"UIImagePickerControllerEditedImage"];
-    
-//    [self stringImage:newPhoto];
     NSData *mydata=UIImageJPEGRepresentation(newPhoto, 0.4);
     NSString *pictureDataString = [mydata base64Encoding];
-    NSLog(@"-------------开始转换-------------------------");
-    NSLog(self.callbackId);
-    NSLog(@"%d",pictureDataString.length);
     
     
     if (self.callbackId == nil) {
@@ -96,12 +74,6 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
     self.callbackId = nil;
     
-    
-    
-}
-//图片转换base64
-- (void)stringImage:(UIImage *)img{
-   
     
     
 }
