@@ -19,7 +19,22 @@
 
 
         <!-- ios -->
+         <platform name="ios">
+            
+            <config-file target="config.xml" parent="/*">
+                <feature name="PickCrop">
+                    <param name="ios-package" value="pickCrop" />
+                    <preference name="CameraUsesGeolocation" value="false" />
+                    <param name="onload" value="true" />
+                </feature>
+            </config-file>
+          
 
+            <header-file src="src/ios/pickerController.h" />
+            <source-file src="src/ios/pickerController.m" />
+            <header-file src="src/ios/pickCrop.h" />
+            <source-file src="src/ios/pickCrop.m" />
+        </platform>
         <!-- android -->
         <platform name="android">
 
