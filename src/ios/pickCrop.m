@@ -12,21 +12,11 @@
 
 - (void)pick:(CDVInvokedUrlCommand*)command
 {
-    NSLog(@"Cordova iOS Cache.clear() called.%@",[command.arguments objectAtIndex:0]);
-//    self.hight = ;
-    self.height = [[command.arguments objectAtIndex:0]intValue];
-    if (self.height == nil) {
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                                          messageAsString:@"参数错误!"];
-        
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
-        return;
-    }
-    
     self.callbackId = command.callbackId;
-    [self alterHeadPortrait];
+    [self alterHeadPortrait:NO];
+    
 }
--(void)alterHeadPortrait{
+-(void)alterHeadPortrait:(BOOL)isCrop{
     
     //初始化提示框
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -39,7 +29,7 @@
         //获取方法3，通过相册（呈现全部图片），UIImagePickerControllerSourceTypeSavedPhotosAlbum
         PickerImage.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         //允许编辑，即放大裁剪
-        PickerImage.allowsEditing = YES;
+        PickerImage.allowsEditing = isCrop;
         //自代理
         PickerImage.delegate = self;
         //页面跳转
@@ -53,12 +43,21 @@
         UIImagePickerController *PickerImage = [[UIImagePickerController alloc]init];
         //获取方式:通过相机
         PickerImage.sourceType = UIImagePickerControllerSourceTypeCamera;
-        PickerImage.allowsEditing = YES;
+        PickerImage.allowsEditing = isCrop;
         PickerImage.delegate = self;
         [self.viewController presentViewController:PickerImage animated:YES completion:nil];
     }]];
     //按钮：取消，类型：UIAlertActionStyleCancel
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action){
+        NSString *pictureDataString = @"user no cancel";
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                          messageAsString:pictureDataString];
+        
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
+    
+    }]];
+    
+    
     [self.viewController presentViewController:alert animated:YES completion:nil];
 }
 /**
@@ -67,20 +66,14 @@
  **/
 - (void)crop:(CDVInvokedUrlCommand*)command
 {
+    self.height = [[command.arguments objectAtIndex:0]intValue];
+    if (self.height == nil) {
+        self.height = 400;
+    }
     
-    
-    NSLog(@"Cordova iOS Cache.clear() called.");
-    pickerController *pc = [[pickerController alloc]init];
-    // 获取方式1：通过相册（呈现全部相册），UIImagePickerControllerSourceTypePhotoLibrary
-    // 获取方式2，通过相机，UIImagePickerControllerSourceTypeCamera
-    // 获取方方式3，通过相册（呈现全部图片），UIImagePickerControllerSourceTypeSavedPhotosAlbum
-    pc.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;//方式1
-    //允许编辑，即放大裁剪
-    pc.allowsEditing = YES;
-    //自代理
-    pc.delegate = self;
     self.callbackId = command.callbackId;
-    [self.viewController presentViewController:pc animated:YES completion:NULL];
+    [self alterHeadPortrait:YES];
+    
 }
 //PickerImage完成后的代理方法
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
@@ -108,7 +101,7 @@
 }
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     
-    NSString *pictureDataString = @"失败";
+    NSString *pictureDataString = @"user no select";
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                       messageAsString:pictureDataString];
     
