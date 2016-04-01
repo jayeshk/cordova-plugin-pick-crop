@@ -13,27 +13,40 @@
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:gravity="center_horizontal"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="#09b5b5b5">
+        android:background="#1bb2b2b2"
+        android:padding="10dp">
 
 
-        <Button
-            android:id="@+id/btn_pick_photo"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="从相册选择"
-            android:background="#f0f0f0"
-            android:textColor="#4852ac" />
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_take_photo"
+            <Button
+                android:id="@+id/btn_pick_photo"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="从相册选择"
+                android:background="@drawable/radius_background"
+                android:textColor="#4852ac"
+                android:layout_marginBottom="-8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="拍照"
-            android:textColor="#4852ac"
-            android:background="#f0f0f0" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="1px">
+
+            <Button
+                android:id="@+id/btn_take_photo"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="拍照"
+                android:textColor="#4852ac"
+                android:background="@drawable/radius_background"
+                android:layout_marginTop="-8dp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_cancel"
@@ -43,6 +56,6 @@
             android:layout_marginTop="10dp"
             android:textColor="#4852ac"
             android:textStyle="bold"
-            android:background="#f0f0f0" />
+            android:background="@drawable/radius_background" />
     </LinearLayout>
 </RelativeLayout>

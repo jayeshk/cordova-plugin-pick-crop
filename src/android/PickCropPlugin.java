@@ -62,9 +62,9 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
             }else {
                 beginCrop(intent.getData());
             }
-        } else if (requestCode == Crop.REQUEST_CROP) {
+        } else if (requestCode == Crop.REQUEST_CROP&&resultCode==Activity.RESULT_OK) {
             handleCrop(resultCode, intent);
-        }else if(requestCode==Crop.REQUEST_CAMERA){
+        }else if(requestCode==Crop.REQUEST_CAMERA&&resultCode==Activity.RESULT_OK){
             beginCrop(takePhotoUri);
         }else {
             this.callbackContext.error("user no select");

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
-            id="cordova-plugin-pick-crop" version="1.1.0">
+            id="cordova-plugin-pick-crop" version="1.1.1">
 
         <name>Pick and Crop</name>
         <description>A cordova plugin for android ,ios to pick image and crop it</description>
@@ -74,6 +74,7 @@
             
             <source-file src="src/android/res/drawable/crop__selectable_background.xml" target-dir="res/drawable" />
             <source-file src="src/android/res/drawable/crop__texture.xml" target-dir="res/drawable" />
+            <source-file src="src/android/res/drawable/radius_background.xml" target-dir="res/drawable" />
             <source-file src="src/android/res/drawable-xhdpi/crop__divider.9.png" target-dir="res/drawable-xhdpi" />
             <source-file src="src/android/res/drawable-xhdpi/crop__ic_cancel.png" target-dir="res/drawable-xhdpi" />
             <source-file src="src/android/res/drawable-xhdpi/crop__ic_done.png" target-dir="res/drawable-xhdpi" />
