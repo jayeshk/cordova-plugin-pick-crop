@@ -68,8 +68,8 @@
             <source-file src="src/android/res/values-zh-rCN/strings.xml" target-dir="res/values-zh-rCN" />
             <source-file src="src/android/res/values/pcik_crop_styles.xml" target-dir="res/values" />
             <source-file src="src/android/res/values/theme.xml" target-dir="res/values" />
-            <source-file src="src/android/res/anim/popup_in.xml" target-dir="res/values" />
-            <source-file src="src/android/res/anim/popup_out.xml" target-dir="res/values" />
+            <source-file src="src/android/res/anim/popup_in.xml" target-dir="res/anim" />
+            <source-file src="src/android/res/anim/popup_out.xml" target-dir="res/anim" />
             
             <source-file src="src/android/res/drawable/crop__selectable_background.xml" target-dir="res/drawable" />
             <source-file src="src/android/res/drawable/crop__texture.xml" target-dir="res/drawable" />
