@@ -7,7 +7,9 @@ module.exports={
      * @param {[[Type]]} error   [[error callback function]]
      */
     pick:function(height,success,error){
-        exec(success,error,'PickCrop','pick',[height]);
+        var param=[];
+        if(height)param.push(height);
+        exec(success,error,'PickCrop','pick',param);
     },
      /**
      *  pick a image and crop it
@@ -16,6 +18,8 @@ module.exports={
      * @param {[[Type]]} error   [[error callback function]]
      */
     crop:function(height,success,error){
-        exec(success,error,'PickCrop','crop',[height]);
+        var param=[];
+        if(height)param.push(height);
+        exec(success,error,'PickCrop','crop',param);
     }
 }

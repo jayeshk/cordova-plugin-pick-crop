@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
-            id="cordova-plugin-pick-crop" version="1.0.0">
+            id="cordova-plugin-pick-crop" version="1.1.0">
 
         <name>Pick and Crop</name>
         <description>A cordova plugin for android ,ios to pick image and crop it</description>
@@ -42,7 +42,7 @@
                 </feature>
             </config-file>
             <config-file target="AndroidManifest.xml" parent="/manifest">
-                <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+                <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
             </config-file>
             <config-file target="AndroidManifest.xml" parent="/manifest/application">
                <activity android:theme="@style/CustomTheme" android:name="cordova.plugins.pickcrop.CropImageActivity">
@@ -59,14 +59,17 @@
             <source-file src="src/android/MonitoredActivity.java" target-dir="src/cordova/plugins/pickcrop" />
             <source-file src="src/android/RotateBitmap.java" target-dir="src/cordova/plugins/pickcrop" />
             <source-file src="src/android/FakeR.java" target-dir="src/cordova/plugins/pickcrop" />
+            <source-file src="src/android/PopSelector.java" target-dir="src/cordova/plugins/pickcrop" />
 
             <source-file src="src/android/res/layout/crop__activity_crop.xml" target-dir="res/layout" />
             <source-file src="src/android/res/layout/crop__layout_done_cancel.xml" target-dir="res/layout" />
             <source-file src="src/android/res/values/attrs.xml" target-dir="res/values" />
             <source-file src="src/android/res/values-en/strings.xml" target-dir="res/values-en" />
             <source-file src="src/android/res/values-zh-rCN/strings.xml" target-dir="res/values-zh-rCN" />
-            <source-file src="src/android/res/values/styles.xml" target-dir="res/values" />
+            <source-file src="src/android/res/values/pcik_crop_styles.xml" target-dir="res/values" />
             <source-file src="src/android/res/values/theme.xml" target-dir="res/values" />
+            <source-file src="src/android/res/anim/popup_in.xml" target-dir="res/values" />
+            <source-file src="src/android/res/anim/popup_out.xml" target-dir="res/values" />
             
             <source-file src="src/android/res/drawable/crop__selectable_background.xml" target-dir="res/drawable" />
             <source-file src="src/android/res/drawable/crop__texture.xml" target-dir="res/drawable" />
