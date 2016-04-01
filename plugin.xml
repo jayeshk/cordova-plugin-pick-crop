@@ -63,6 +63,7 @@
 
             <source-file src="src/android/res/layout/crop__activity_crop.xml" target-dir="res/layout" />
             <source-file src="src/android/res/layout/crop__layout_done_cancel.xml" target-dir="res/layout" />
+            <source-file src="src/android/res/layout/crop__popview_selector.xml" target-dir="res/layout" />
             <source-file src="src/android/res/values/attrs.xml" target-dir="res/values" />
             <source-file src="src/android/res/values-en/strings.xml" target-dir="res/values-en" />
             <source-file src="src/android/res/values-zh-rCN/strings.xml" target-dir="res/values-zh-rCN" />
