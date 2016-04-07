@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import org.apache.cordova.CordovaPlugin;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -111,7 +113,7 @@ public class Crop {
      * @param plugin
      */
     public void start(CordovaPlugin plugin) {
-        plugin.cordova.startActivityForResult(plugin,getIntent(plugin.cordova.getActivity()),REQUEST_CROP);
+        plugin.cordova.startActivityForResult(plugin, getIntent(plugin.cordova.getActivity()), REQUEST_CROP);
     }
 
     /**
@@ -244,6 +246,13 @@ public class Crop {
     public static String toBase64(Context context,Uri uri){
         byte[] bytes=toBytes(context,uri);
         if(bytes==null)return null;
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
+    }
+
+    public static String toBase64(Context context,Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] bytes= baos.toByteArray();
         return Base64.encodeToString(bytes,Base64.DEFAULT);
     }
 
@@ -258,5 +267,20 @@ public class Crop {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
         return baos.toByteArray();
+    }
+
+    /**
+     *
+     * @param context
+     * @param uri
+     * @param maxHeight
+     * @return
+     */
+    public static Bitmap zoomImage(Context context,Uri uri,int maxHeight){
+        File file=CropUtil.getFromMediaUri(context,context.getContentResolver(),uri);
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        Bitmap bitmap= BitmapFactory.decodeFile(file.getAbsolutePath(),options);
+        int outW=options.outWidth*maxHeight/options.outHeight;
+       return Bitmap.createScaledBitmap(bitmap,outW,maxHeight,true);
     }
 }

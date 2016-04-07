@@ -2,6 +2,7 @@ package cordova.plugins.pickcrop;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.Gravity;
@@ -53,7 +54,9 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK) {
             if(justPick){
-                String r=Crop.toBase64(cordova.getActivity(), intent.getData());
+                Bitmap bm=Crop.zoomImage(cordova.getActivity(),intent.getData(),targetHeight);
+                String r=Crop.toBase64(cordova.getActivity(), bm);
+                bm.recycle();
                 if(r==null){
                     this.callbackContext.error("Convert to base64 is error");
                 }else {
@@ -65,7 +68,18 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         } else if (requestCode == Crop.REQUEST_CROP&&resultCode==Activity.RESULT_OK) {
             handleCrop(resultCode, intent);
         }else if(requestCode==Crop.REQUEST_CAMERA&&resultCode==Activity.RESULT_OK){
-            beginCrop(takePhotoUri);
+            if(justPick) {
+                Bitmap bm = Crop.zoomImage(cordova.getActivity(), takePhotoUri, targetHeight);
+                String r = Crop.toBase64(cordova.getActivity(), bm);
+                bm.recycle();
+                if (r == null) {
+                    this.callbackContext.error("Convert to base64 is error");
+                } else {
+                    this.callbackContext.success(r);
+                }
+            }else {
+                beginCrop(takePhotoUri);
+            }
         }else {
             this.callbackContext.error("user no select");
         }
