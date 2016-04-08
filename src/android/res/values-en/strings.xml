@@ -6,5 +6,7 @@
 
     <string name="crop__done">DONE</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">CANCEL</string>
+    <string name="crop__from_gallery">Gallery</string>
+    <string name="crop__from_camera">Camera</string>
 
 </resources>
