@@ -6,5 +6,7 @@
 
     <string name="crop__done">完成</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">取消</string>
+    <string name="crop__from_gallery">从相册选择</string>
+    <string name="crop__from_camera">相机</string>
 
 </resources>
