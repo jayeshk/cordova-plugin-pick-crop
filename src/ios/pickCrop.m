@@ -5,6 +5,7 @@
 @synthesize command;
 @synthesize callbackId;
 
+
 /**
  *选择图片
  *
@@ -12,8 +13,14 @@
 
 - (void)pick:(CDVInvokedUrlCommand*)command
 {
+    self.height = [[command.arguments objectAtIndex:0]intValue];
+    if (self.height == nil) {
+        self.height = 400;
+    }
+    
     self.callbackId = command.callbackId;
-    [self alterHeadPortrait:NO];
+    self.isCrop = NO;
+    [self alterHeadPortrait:self.isCrop];
     
 }
 -(void)alterHeadPortrait:(BOOL)isCrop{
@@ -72,7 +79,8 @@
     }
     
     self.callbackId = command.callbackId;
-    [self alterHeadPortrait:YES];
+    self.isCrop = YES;
+    [self alterHeadPortrait:self.isCrop];
     
 }
 //PickerImage完成后的代理方法
@@ -81,9 +89,22 @@
     [self.viewController dismissViewControllerAnimated:YES completion:nil];
     
     //定义一个newPhoto，用来存放我们选择的图片。
-    UIImage *newPhoto = [info objectForKey:@"UIImagePickerControllerEditedImage"];
-    CGFloat height= (CGFloat)(self.height);
-    UIImage *newd = [self scaleToSize:newPhoto size:CGSizeMake(height,height)];
+    NSString *pickerType;
+    if (self.isCrop) {
+        pickerType = @"UIImagePickerControllerEditedImage";
+    }else{
+        pickerType = @"UIImagePickerControllerOriginalImage";
+    }
+    UIImage *newPhoto = [info objectForKey:pickerType];
+    CGSize newCGSize;
+    if (newPhoto.size.height != newPhoto.size.width) {//如果选中的图片宽高不等则安比例缩小图片
+       newCGSize.width = newPhoto.size.width/(newPhoto.size.height/self.height);
+       newCGSize.height = self.height;
+    }else{
+        newCGSize.width = self.height;
+        newCGSize.height = self.height;
+    }
+    UIImage *newd = [self scaleToSize:newPhoto size:newCGSize];
     
     NSData *mydata=UIImageJPEGRepresentation(newd, 0.4);
     NSString *pictureDataString = [mydata base64Encoding];

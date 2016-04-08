@@ -34,6 +34,7 @@
 // retain command for async repsonses
 @property (nonatomic, strong) CDVInvokedUrlCommand* command;
 @property (copy) NSString* callbackId;
-@property int height;
+@property int height;;
+@property BOOL isCrop;
 
 @end
