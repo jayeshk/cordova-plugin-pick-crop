@@ -7,10 +7,11 @@
     cordova plugin add https://github.com/huangliop/cordova-plugin-pick-crop.git
 #Screen Shoot
 
+  ![android-3](./screenshot-android-3.jpg)
+  ![android-4](./screenshot-android-4.jpg)
+  ![android-1](./screenshot-android-1.jpg)
+  ![android-2](./screenshot-android-2.jpg)
 
-    ![android-3](screenshot-android-3.jpg)
-    ![android-1](screenshot-android-1.jpg)
-    ![android-2](screenshot-android-2.jpg)
 #Usage
 
 ##Just pick a photo
