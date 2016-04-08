@@ -20,7 +20,10 @@
 
         <!-- ios -->
          <platform name="ios">
-            
+            <config-file target="*-Info.plist" parent="Localized resources can be mixed">
+               <true/>
+            </config-file>
+
             <config-file target="config.xml" parent="/*">
                 <feature name="PickCrop">
                     <param name="ios-package" value="pickCrop" />
