@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  CEACApp
+
+  Created by 李常龙 on 16/4/11.
+
+*/
+//英文
+"从相册选择" = "Photo Gallery Select";
+"拍照" = "Photograph";
+"取消" = "cancel";
