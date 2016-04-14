@@ -128,19 +128,18 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         cordova.startActivityForResult(this,intent,Crop.REQUEST_CAMERA);
     }
     private void doIt(){
-        if("pick".equals(action)){
-            justPick=true;
-            Crop.pickImage(this);
-        }else if ("crop".equals(action)){
-            justPick=false;
-            Crop.pickImage(this);
-        }
+        Crop.pickImage(this);
     }
 
     @Override
     public void onClick(View v) {
         int camera=FakeR.getId(cordova.getActivity(),"id","btn_take_photo");
         int gallery=FakeR.getId(cordova.getActivity(),"id","btn_pick_photo");
+        if("pick".equals(action)){
+            justPick=true;
+        }else if ("crop".equals(action)){
+            justPick=false;
+        }
         if(v.getId()==camera){
             takePhoto();
         }else if(v.getId()==gallery){
