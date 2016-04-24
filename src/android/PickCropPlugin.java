@@ -1,12 +1,15 @@
 package cordova.plugins.pickcrop;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Toast;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -20,6 +23,7 @@ import java.io.File;
  * Create by Huang Li
  */
 public class PickCropPlugin extends CordovaPlugin implements View.OnClickListener{
+    private static int CAMERA_REQUEST_CODE=23;
     /**
      * true 表示只选择图片并不，裁剪图片
      */
@@ -125,10 +129,33 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         takePhotoUri = Uri.fromFile(new File(cordova.getActivity().getExternalCacheDir(), "/taked.jpg"));
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, takePhotoUri); //指定图片输出地址
-        cordova.startActivityForResult(this,intent,Crop.REQUEST_CAMERA);
+        cordova.startActivityForResult(this, intent, Crop.REQUEST_CAMERA);
     }
     private void doIt(){
         Crop.pickImage(this);
+    }
+
+    private void checkPermission(){
+        if (!cordova.hasPermission(Manifest.permission.CAMERA)) {
+                cordova.requestPermissions(this, CAMERA_REQUEST_CODE,
+                        new String[]{Manifest.permission.CAMERA}
+                );
+        }else {
+            takePhoto();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
+        super.onRequestPermissionResult(requestCode, permissions, grantResults);
+        if(requestCode==CAMERA_REQUEST_CODE){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted
+                takePhoto();
+            } else {
+                Toast.makeText(cordova.getActivity(),"No Permission ",Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -141,7 +168,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
             justPick=false;
         }
         if(v.getId()==camera){
-            takePhoto();
+            checkPermission();
         }else if(v.getId()==gallery){
             doIt();
         }else {
@@ -149,4 +176,5 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         }
         selector.dismiss();
     }
+
 }
