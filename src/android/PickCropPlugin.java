@@ -148,8 +148,8 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
     }
 
     private void goToSettings() {
-        int id_OK=FakeR.getId(cordova.getActivity(),"string","crop__done");
-        int id_Cancel=FakeR.getId(cordova.getActivity(),"string","crop__cancel");
+        int id_OK=FakeR.getId(cordova.getActivity(),"string","crop__yes");
+        int id_Cancel=FakeR.getId(cordova.getActivity(),"string","crop__no");
         AlertDialog.Builder builder=new AlertDialog.Builder(cordova.getActivity());
         builder.setMessage(FakeR.getId(cordova.getActivity(),"string","crop__no_permission"));
         builder.setPositiveButton(id_OK, new DialogInterface.OnClickListener() {

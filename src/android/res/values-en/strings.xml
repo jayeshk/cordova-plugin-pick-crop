@@ -9,4 +9,6 @@
     <string name="crop__from_gallery">Gallery</string>
     <string name="crop__from_camera">Camera</string>
     <string name="crop__no_permission">No camera permission,go to open it?</string>
+    <string name="crop__yes">Yes</string>
+    <string name="crop__no">No</string>
 </resources>
