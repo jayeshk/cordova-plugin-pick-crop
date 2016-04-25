@@ -2,14 +2,16 @@ package cordova.plugins.pickcrop;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Toast;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -23,7 +25,7 @@ import java.io.File;
  * Create by Huang Li
  */
 public class PickCropPlugin extends CordovaPlugin implements View.OnClickListener{
-    private static int CAMERA_REQUEST_CODE=23;
+    private static final int CAMERA_REQUEST_CODE = 862;
     /**
      * true 表示只选择图片并不，裁剪图片
      */
@@ -137,24 +139,56 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
 
     private void checkPermission(){
         if (!cordova.hasPermission(Manifest.permission.CAMERA)) {
-                cordova.requestPermissions(this, CAMERA_REQUEST_CODE,
-                        new String[]{Manifest.permission.CAMERA}
-                );
+            cordova.requestPermissions(this, CAMERA_REQUEST_CODE,
+                    new String[]{Manifest.permission.CAMERA}
+            );
         }else {
             takePhoto();
         }
     }
 
+    private void goToSettings() {
+        int id_OK=FakeR.getId(cordova.getActivity(),"string","crop__done");
+        int id_Cancel=FakeR.getId(cordova.getActivity(),"string","crop__cancel");
+        AlertDialog.Builder builder=new AlertDialog.Builder(cordova.getActivity());
+        builder.setMessage(FakeR.getId(cordova.getActivity(),"string","crop__no_permission"));
+        builder.setPositiveButton(id_OK, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent myAppSettings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + cordova.getActivity().getPackageName()));
+                myAppSettings.addCategory(Intent.CATEGORY_DEFAULT);
+                myAppSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                cordova.getActivity().startActivity(myAppSettings);
+            }
+        });
+        builder.setNegativeButton(id_Cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.create().show();
+    }
+
     @Override
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
         super.onRequestPermissionResult(requestCode, permissions, grantResults);
-        if(requestCode==CAMERA_REQUEST_CODE){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission Granted
-                takePhoto();
-            } else {
-                Toast.makeText(cordova.getActivity(),"No Permission ",Toast.LENGTH_SHORT).show();
+        for(int r:grantResults){
+            if(r == PackageManager.PERMISSION_DENIED)
+            {
+                cordova.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        goToSettings();
+                    }
+                });
+                return;
             }
+        }
+        switch(requestCode){
+            case CAMERA_REQUEST_CODE:
+                takePhoto();
+                break;
         }
     }
 

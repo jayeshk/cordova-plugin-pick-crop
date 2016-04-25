@@ -8,5 +8,5 @@
     <string name="crop__cancel" tools:ignore="ButtonCase">CANCEL</string>
     <string name="crop__from_gallery">Gallery</string>
     <string name="crop__from_camera">Camera</string>
-
+    <string name="crop__no_permission">No camera permission,go to open it?</string>
 </resources>
