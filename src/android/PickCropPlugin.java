@@ -3,6 +3,7 @@ package cordova.plugins.pickcrop;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -119,6 +121,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
     }
 
     private void showPop(){
+        closeKeyboard();
         if(selector==null)selector=new PopSelector(cordova.getActivity(),this);
         if(selector.isShowing())return;
         selector.showAtLocation(cordova.getActivity().getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 0);
@@ -196,6 +199,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
     public void onClick(View v) {
         int camera=FakeR.getId(cordova.getActivity(),"id","btn_take_photo");
         int gallery=FakeR.getId(cordova.getActivity(),"id","btn_pick_photo");
+
         if("pick".equals(action)){
             justPick=true;
         }else if ("crop".equals(action)){
@@ -210,5 +214,11 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         }
         selector.dismiss();
     }
-
+    private void closeKeyboard(){
+        View view = cordova.getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)cordova.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }
