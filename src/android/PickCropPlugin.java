@@ -218,7 +218,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         View view = cordova.getActivity().getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)cordova.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 }
