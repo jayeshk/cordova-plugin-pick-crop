@@ -265,7 +265,7 @@ public class Crop {
             return null;
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        bm.compress(Bitmap.CompressFormat.JPEG, quality, baos); //bm is the bitmap object
         return baos.toByteArray();
     }
 
