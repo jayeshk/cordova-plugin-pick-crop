@@ -1,4 +1,6 @@
 var exec=require('cordova/exec');
+var _defaultHeight=400,
+    _defaultQuality=100;
 module.exports={
     /**
      * just pick a image ,dont crop it
@@ -6,9 +8,23 @@ module.exports={
      * @param {[[Type]]} success [[success callback function]]
      * @param {[[Type]]} error   [[error callback function]]
      */
-    pick:function(height,success,error){
-        var param=[];
-        if(height)param.push(height);
+    pick:function(params,success,error){
+        var param=[]; 
+        if(params){
+            if(params.height){
+                param.push(params.height);
+            }else{
+                param.push(_defaultHeight);
+            }
+            if(params.quality){
+                param.push(params.quality);
+            }else{
+                param.push(_defaultQuality);
+            }
+        }else{
+            param.push(_defaultHeight);
+            param.push(_defaultQuality);
+        }
         exec(success,error,'PickCrop','pick',param);
     },
      /**
@@ -17,9 +33,23 @@ module.exports={
      * @param {[[Type]]} success [[success callback function]]
      * @param {[[Type]]} error   [[error callback function]]
      */
-    crop:function(height,success,error){
+    crop:function(params,success,error){
         var param=[];
-        if(height)param.push(height);
+        if(params){
+            if(params.height){
+                param.push(params.height);
+            }else{
+                param.push(_defaultHeight);
+            }
+            if(params.quality){
+                param.push(params.quality);
+            }else{
+                param.push(_defaultQuality);
+            }
+        }else{
+            param.push(_defaultHeight);
+            param.push(_defaultQuality);
+        }
         exec(success,error,'PickCrop','crop',param);
     }
 }

@@ -36,6 +36,10 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
      *  set the result image height,default 400 for transmission
      */
     private int targetHeight=400;
+    /**
+     * set the image compress quality,default 100
+     */
+    private int quality=100;
 
     private CallbackContext callbackContext;
     private String action;
@@ -52,7 +56,8 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         result.setKeepCallback(true);
         callbackContext.sendPluginResult(result);
         this.action=action;
-        if(args.length()==1)targetHeight=args.getInt(0);
+        targetHeight=args.getInt(0);
+        quality=args.getInt(1);
         showPop();
         return true;
     }
@@ -63,7 +68,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         if (requestCode == Crop.REQUEST_PICK && resultCode == Activity.RESULT_OK) {
             if(justPick){
                 Bitmap bm=Crop.zoomImage(cordova.getActivity(),intent.getData(),targetHeight);
-                String r=Crop.toBase64(cordova.getActivity(), bm);
+                String r=Crop.toBase64(cordova.getActivity(), bm,quality);
                 bm.recycle();
                 if(r==null){
                     this.callbackContext.error("Convert to base64 is error");
@@ -78,7 +83,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         }else if(requestCode==Crop.REQUEST_CAMERA&&resultCode==Activity.RESULT_OK){
             if(justPick) {
                 Bitmap bm = Crop.zoomImage(cordova.getActivity(), takePhotoUri, targetHeight);
-                String r = Crop.toBase64(cordova.getActivity(), bm);
+                String r = Crop.toBase64(cordova.getActivity(), bm,quality);
                 bm.recycle();
                 if (r == null) {
                     this.callbackContext.error("Convert to base64 is error");
@@ -109,7 +114,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
      */
     private void handleCrop(int resultCode, Intent result) {
         if (resultCode == Activity.RESULT_OK) {
-            String r=Crop.toBase64(cordova.getActivity(), Crop.getOutput(result));
+            String r=Crop.toBase64(cordova.getActivity(), Crop.getOutput(result),quality);
             if(r==null){
                 this.callbackContext.error("Convert to base64 is error");
             }else {

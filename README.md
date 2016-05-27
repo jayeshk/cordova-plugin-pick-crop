@@ -18,11 +18,14 @@
 ```
  /**
      * just pick a image ,dont crop it
-     * @param {[[Type]]} height  [[set the result image's height]]
+     * @param {[[Type]]} params   
      * @param {[[Type]]} success [[success callback function]]
      * @param {[[Type]]} error   [[error callback function]]
      */
-plugins.pickCrop.pick(300,function(result){
+plugins.pickCrop.pick({
+   height:500, 
+   quality:75
+},function(result){
     //"result" is base64 string of result photo
 },function(error){
     console.error(error);
@@ -31,11 +34,14 @@ plugins.pickCrop.pick(300,function(result){
 ##Pick and Crop a photo
 ```
  /** 
-     * @param {[[Type]]} height  [[set the result image's height]]
+     * @param {[[Type]]} params  [[set the result image's height]]
      * @param {[[Type]]} success [[success callback function]]
      * @param {[[Type]]} error   [[error callback function]]
      */
-plugins.pickCrop.crop(300,function(result){
+plugins.pickCrop.crop({
+   height:500,
+   quality:75
+},function(result){
     //"result" is base64 string of result photo
 },function(error){
     console.error(error);

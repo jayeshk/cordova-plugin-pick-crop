@@ -14,6 +14,7 @@
 - (void)pick:(CDVInvokedUrlCommand*)command
 {
     self.height = [[command.arguments objectAtIndex:0]intValue];
+    self.quality = [[command.arguments objectAtIndex:1]intValue];
     if (self.height == nil) {
         self.height = 400;
     }
@@ -106,7 +107,7 @@
     }
     UIImage *newd = [self scaleToSize:newPhoto size:newCGSize];
     
-    NSData *mydata=UIImageJPEGRepresentation(newd, 0.4);
+    NSData *mydata=UIImageJPEGRepresentation(newd, self.quality/100);
     NSString *pictureDataString = [mydata base64Encoding];
     if (self.callbackId == nil) {
         return;

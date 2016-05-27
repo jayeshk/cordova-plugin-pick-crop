@@ -243,20 +243,20 @@ public class Crop {
      * @param uri
      * @return
      */
-    public static String toBase64(Context context,Uri uri){
-        byte[] bytes=toBytes(context,uri);
+    public static String toBase64(Context context,Uri uri,int quality){
+        byte[] bytes=toBytes(context,uri,quality);
         if(bytes==null)return null;
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
+        return Base64.encodeToString(bytes, Base64.NO_WRAP);
     }
 
-    public static String toBase64(Context context,Bitmap bitmap){
+    public static String toBase64(Context context,Bitmap bitmap,int quality){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos); //bm is the bitmap object
         byte[] bytes= baos.toByteArray();
         return Base64.encodeToString(bytes,Base64.DEFAULT);
     }
 
-    private static byte[] toBytes(Context context,Uri uri){
+    private static byte[] toBytes(Context context,Uri uri,int quality){
         Bitmap bm = null;
         try {
             bm = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
