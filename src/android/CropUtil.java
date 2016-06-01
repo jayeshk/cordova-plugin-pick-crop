@@ -16,6 +16,7 @@
 
 package cordova.plugins.pickcrop;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
@@ -85,36 +87,71 @@ class CropUtil {
             return false;
         }
     }
-
+    @TargetApi(19)
     public static File getFromMediaUri(Context context, ContentResolver resolver, Uri uri) {
         if (uri == null) return null;
 
         if (SCHEME_FILE.equals(uri.getScheme())) {
             return new File(uri.getPath());
         } else if (SCHEME_CONTENT.equals(uri.getScheme())) {
-            final String[] filePathColumn = { MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME };
-            Cursor cursor = null;
-            try {
-                cursor = resolver.query(uri, filePathColumn, null, null, null);
-                if (cursor != null && cursor.moveToFirst()) {
-                    final int columnIndex = (uri.toString().startsWith("content://com.google.android.gallery3d")) ?
-                            cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME) :
-                            cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
-                    // Picasa images on API 13+
-                    if (columnIndex != -1) {
-                        String filePath = cursor.getString(columnIndex);
-                        if (!TextUtils.isEmpty(filePath)) {
-                            return new File(filePath);
+            String filePath="";
+            if(isMediaDocument(uri)){
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri = null;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                }
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[] {
+                        split[1]
+                };
+
+                Cursor cursor = null;
+                final String column = "_data";
+                final String[] projection = {
+                        column
+                };
+
+                try {
+                    cursor = context.getContentResolver().query(contentUri, projection, selection, selectionArgs,
+                            null);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        final int column_index = cursor.getColumnIndexOrThrow(column);
+                        filePath= cursor.getString(column_index);
+                    }
+                } finally {
+                    if (cursor != null)
+                        cursor.close();
+                }
+            }else {
+                final String[] filePathColumn = { MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME };
+                Cursor cursor = null;
+                try {
+                    cursor = resolver.query(uri, filePathColumn, null, null, null);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        final int columnIndex = (uri.toString().startsWith("content://com.google.android.gallery3d")) ?
+                                cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME) :
+                                cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
+                        // Picasa images on API 13+
+                        if (columnIndex != -1) {
+                            filePath = cursor.getString(columnIndex);
                         }
                     }
+                } catch (IllegalArgumentException e) {
+                    // Google Drive images
+                    return getFromMediaUriPfd(context, resolver, uri);
+                } catch (SecurityException ignored) {
+                    // Nothing we can do
+                } finally {
+                    if (cursor != null) cursor.close();
                 }
-            } catch (IllegalArgumentException e) {
-                // Google Drive images
-                return getFromMediaUriPfd(context, resolver, uri);
-            } catch (SecurityException ignored) {
-                // Nothing we can do
-            } finally {
-                if (cursor != null) cursor.close();
+            }
+
+            if (!TextUtils.isEmpty(filePath)) {
+                return new File(filePath);
             }
         }
         return null;
@@ -211,5 +248,11 @@ class CropUtil {
             dialog.show();
         }
     }
-
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
 }
