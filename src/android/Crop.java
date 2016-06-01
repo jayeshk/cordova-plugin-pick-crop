@@ -253,7 +253,7 @@ public class Crop {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos); //bm is the bitmap object
         byte[] bytes= baos.toByteArray();
-        return Base64.encodeToString(bytes,Base64.DEFAULT);
+        return Base64.encodeToString(bytes,Base64.NO_WRAP);
     }
 
     private static byte[] toBytes(Context context,Uri uri,int quality){
