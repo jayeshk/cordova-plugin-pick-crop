@@ -6,9 +6,9 @@
 
     <string name="crop__done">DONE</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">CANCEL</string>
-    <string name="crop__from_gallery">Gallery</string>
-    <string name="crop__from_camera">Camera</string>
-    <string name="crop__no_permission">No camera permission,go to open it?</string>
+    <string name="crop__from_gallery">Photo Gallery</string>
+    <string name="crop__from_camera">Camera Photo</string>
+    <string name="crop__no_permission">Please allow camera permissions</string>
     <string name="crop__yes">Yes</string>
     <string name="crop__no">No</string>
 </resources>

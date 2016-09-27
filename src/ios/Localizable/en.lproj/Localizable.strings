@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   CEACApp
 
@@ -6,6 +6,6 @@
 
 */
 //英文
-"从相册选择" = "Photo Gallery Select";
-"拍照" = "Photograph";
-"取消" = "cancel";
+"从相册选择" = "Photo Library";
+"拍照" = "Camera Photo";
+"取消" = "Cancel";
