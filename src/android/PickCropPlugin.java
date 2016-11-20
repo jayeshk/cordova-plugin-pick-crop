@@ -1,3 +1,5 @@
+
+
 package cordova.plugins.pickcrop;
 
 import android.Manifest;
@@ -28,8 +30,13 @@ import java.io.File;
  */
 public class PickCropPlugin extends CordovaPlugin implements View.OnClickListener{
     private static final int CAMERA_REQUEST_CODE = 862;
+    
+    
+    //-------------w7shal-----------
+    private static final int GALLERY_REQUEST_CODE = 555;
+    
     /**
-     * true 表示只选择图片并不，裁剪图片
+     * true ?????????,????
      */
     private boolean justPick=true;
     /**
@@ -40,7 +47,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
      * set the image compress quality,default 100
      */
     private int quality=100;
-
+    
     private CallbackContext callbackContext;
     private String action;
     private PopSelector selector;
@@ -48,7 +55,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
      * Save path of the camera picture
      */
     private Uri takePhotoUri;
-
+    
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         this.callbackContext=callbackContext;
@@ -61,7 +68,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         showPop();
         return true;
     }
-
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -97,7 +104,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
             this.callbackContext.error("user no select");
         }
     }
-
+    
     /**
      *
      * @param source
@@ -106,9 +113,9 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         Uri destination = Uri.fromFile(new File(cordova.getActivity().getCacheDir(), "cropped"));
         Crop.of(source, destination).withMaxSize(targetHeight,targetHeight).asSquare().start(this);
     }
-
+    
     /**
-     * 剪切成功后的回调
+     * ????????
      * @param resultCode
      * @param result
      */
@@ -124,42 +131,66 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
             this.callbackContext.error(Crop.getError(result).getMessage());
         }
     }
-
+    
     private void showPop(){
         closeKeyboard();
         if(selector==null)selector=new PopSelector(cordova.getActivity(),this);
         if(selector.isShowing())return;
         selector.showAtLocation(cordova.getActivity().getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 0);
     }
-
+    
     /**
-     * 从照相机获取源图片
+     * ?????????
      */
     private void takePhoto(){
         takePhotoUri = Uri.fromFile(new File(cordova.getActivity().getExternalCacheDir(), "/taked.jpg"));
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, takePhotoUri); //指定图片输出地址
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, takePhotoUri); //????????
         cordova.startActivityForResult(this, intent, Crop.REQUEST_CAMERA);
     }
     private void doIt(){
         Crop.pickImage(this);
     }
-
+    
     private void checkPermission(){
         if (!cordova.hasPermission(Manifest.permission.CAMERA)) {
             cordova.requestPermissions(this, CAMERA_REQUEST_CODE,
-                    new String[]{Manifest.permission.CAMERA}
-            );
+                                       new String[]{Manifest.permission.CAMERA}
+                                       );
         }else {
             takePhoto();
         }
     }
-
-    private void goToSettings() {
+    
+    
+    private void checkGalleryPermission(){
+        if (!cordova.hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            cordova.requestPermissions(this, GALLERY_REQUEST_CODE,
+                                       new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}
+                                       );
+        }else {
+            doIt();
+        }
+    }
+    
+    
+    /**
+     * create by w7shal (15th nov 2016)
+     *  is camera pass because when we want camera permission dialog that time is camera = true otherwise it's consider gallery permission
+     * @param isCamera
+     */
+    private void goToSettings(boolean isCamera) {
         int id_OK=FakeR.getId(cordova.getActivity(),"string","crop__yes");
         int id_Cancel=FakeR.getId(cordova.getActivity(),"string","crop__no");
         AlertDialog.Builder builder=new AlertDialog.Builder(cordova.getActivity());
-        builder.setMessage(FakeR.getId(cordova.getActivity(),"string","crop__no_permission"));
+        
+        if (isCamera) {
+            builder.setMessage(FakeR.getId(cordova.getActivity(), "string", "crop__no_permission"));
+        }
+        else
+        {
+            builder.setMessage(FakeR.getId(cordova.getActivity(), "string", "crop__no_gallery_permission"));
+        }
         builder.setPositiveButton(id_OK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -177,17 +208,26 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         });
         builder.create().show();
     }
-
+    
     @Override
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
         super.onRequestPermissionResult(requestCode, permissions, grantResults);
         for(int r:grantResults){
             if(r == PackageManager.PERMISSION_DENIED)
             {
+                
+                //----------w7shal
+                final int requestCodes = requestCode;
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        goToSettings();
+                        if (requestCodes == CAMERA_REQUEST_CODE) {
+                            goToSettings(true);
+                        }
+                        else
+                        {
+                            goToSettings(false);
+                        }
                     }
                 });
                 return;
@@ -197,14 +237,17 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
             case CAMERA_REQUEST_CODE:
                 takePhoto();
                 break;
+            case GALLERY_REQUEST_CODE:
+                doIt();
+                break;
         }
     }
-
+    
     @Override
     public void onClick(View v) {
         int camera=FakeR.getId(cordova.getActivity(),"id","btn_take_photo");
         int gallery=FakeR.getId(cordova.getActivity(),"id","btn_pick_photo");
-
+        
         if("pick".equals(action)){
             justPick=true;
         }else if ("crop".equals(action)){
@@ -213,7 +256,7 @@ public class PickCropPlugin extends CordovaPlugin implements View.OnClickListene
         if(v.getId()==camera){
             checkPermission();
         }else if(v.getId()==gallery){
-            doIt();
+            checkGalleryPermission();
         }else {
             callbackContext.error("user no select");
         }

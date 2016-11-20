@@ -8,6 +8,7 @@
     <string name="crop__cancel" tools:ignore="ButtonCase">取消</string>
     <string name="crop__from_gallery">从相册选择</string>
     <string name="crop__from_camera">相机</string>
+    <string name="crop__no_gallery_permission">没有图库权限，去打开吗？</string>
     <string name="crop__no_permission">没有相机权限，是否去打开?</string>
     <string name="crop__yes">是</string>
     <string name="crop__no">否</string>
